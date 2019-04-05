@@ -1,7 +1,32 @@
 # dvf_smc
 Dose warping implementation for TOPAS 4DDC using deformation vector field (DICOM)
 
-#### 4.0 Getting DVF from MIM
+## Class design
+
+Class to represent a type of 3D rectangles, CT, RTDOSE, and DVF is written.
+
+<img src="./imgs/class_rect3d.png" width="600">
+
+Among interpolation algorithms such as Trilinear, Prismatic, Pyramid, Tetrahedra, Nearest neighbor, etc., Trilinear is implemented.
+
+
+## How to compile 
+
+- Library dependencies: gdcm (2.6.x) 
+- compiler: 
+    - For Mac, Apple LLVM version 10.0.1 (clang-1001.0.46.3).
+    - For Linux, never tested
+
+```
+
+$ cmake .
+$ make 
+$ ./dvf --ctdir <your_ct_dir_path> --dosefile <your_rtdose_file> --dvffile <your_dvf_file> 
+
+```
+
+
+## Getting DVF from MIM
 
 - Load Two image series using MIM
 <img src="./imgs/mim_moving_fixed.png" width="400">
@@ -9,6 +34,7 @@ Dose warping implementation for TOPAS 4DDC using deformation vector field (DICOM
 - Click fuse icon <img src="./imgs/mim_fusion_icon.png" width="50">
 
 - Then MIM will show at bottom (be careful which one is moving or fixed)
+The seriese you click first will be the reference.
 <img src="./imgs/mim_fusion_series.png" width="400">
 
 - Click DIR button <img src="./imgs/mim_deform_icon.png" width="50">
@@ -22,13 +48,8 @@ Then a DICOM file is created. For the detail of the file see:
 
 http://dicom.nema.org/MEDICAL/dicom/2017b/output/chtml/part03/sect_C.20.3.html
 
-#### 4.1 Volume object
+## Example code (dvf_smc.cpp)
 
-Class to represent a type of 3D rectangles, CT, RTDOSE, and DVF is written.
-
-<img src="./imgs/class_rect3d.png" width="600">
-
-Among interpolation algorithms such as Trilinear, Prismatic, Pyramid, Tetrahedra, Nearest neighbor, etc., Trilinear is implemented.
 
 ```c++
 //ctdir
@@ -104,9 +125,7 @@ Here are the conversion result (including interpolation step)
 
 
 
-#### 4.2 Dose warping
-
-
+## Dose warping
 
 The dose warping is implemented. 
 Dose of source (moving phase) is pulled from the destination grid. 
@@ -120,12 +139,3 @@ Plastimatch uses its own implementation or uses itk::WarpImageFilter
 
 https://itk.org/Doxygen/html/classitk_1_1WarpImageFilter.html
 
-
-**Current issues**
-
-
-
-- DVF vector transform based on coordinate transform
-  - (dose_warp0.mha vs dose_warp0.mha)
-- pixel's dimension works with double type. float gives strange results.
-- dx_, dy_, dz_
