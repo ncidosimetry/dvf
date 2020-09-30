@@ -1,5 +1,5 @@
-# dvf_smc
-Dose warping implementation for TOPAS 4DDC using deformation vector field (DICOM)
+# dvf
+Dose warping implementation using deformation vector field (DICOM)
 
 ## Class design
 
